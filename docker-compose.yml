@@ -3,7 +3,7 @@ version: '3.8'
 services:
   mongodb:
     container_name: posts-api-database
-    image: mongo:latest
+    image: mongo:8.0.17-noble
     restart: unless-stopped
     ports:
       - "27018:27017"
