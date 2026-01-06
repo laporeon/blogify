@@ -1,11 +1,11 @@
 package com.laporeon.posts_api.controllers;
 
-import com.laporeon.posts_api.utils.SwaggerExamples;
-import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.request.PostRequestDTO;
-import com.laporeon.posts_api.dto.response.PostResponseDTO;
 import com.laporeon.posts_api.dto.response.ErrorResponseDTO;
+import com.laporeon.posts_api.dto.response.PageResponseDTO;
+import com.laporeon.posts_api.dto.response.PostResponseDTO;
 import com.laporeon.posts_api.services.PostService;
+import com.laporeon.posts_api.utils.SwaggerExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 
 @Tag(name = "Posts", description = "Endpoints for managing blog posts")
 @RestController
@@ -33,7 +35,7 @@ public class PostController {
 
     @Operation(
             summary = "Create a new post",
-            description = "Creates a new post with specified title, description and content. Validates input and returns saved post.",
+            description = "Creates a new post with specified title, description and body content. Validates input and returns saved post.",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Post successfully created",
                             content = @Content(
@@ -60,7 +62,7 @@ public class PostController {
 
     @Operation(
             summary = "List all posts",
-            description = "Returns a paginated and sorted list of posts, allowing control over page number, size, order by field, and sort direction.",
+            description = "Returns a paginated and sorted list of posts, allowing control over page number, size, order by field, sort direction and range date.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Posts page successfully retrieved",
                             content = @Content(
@@ -75,20 +77,27 @@ public class PostController {
             }
     )
     @GetMapping
-    public ResponseEntity<PageResponseDTO> listPosts(
-            @Parameter(description = "Page number")
+    public ResponseEntity<PageResponseDTO> listPosts(@Parameter(description = "Page number")
             @RequestParam(value = "page", defaultValue = "0") int page,
             @Parameter(description = "Number of items per page")
             @RequestParam(value = "size", defaultValue = "10") int size,
-            @Parameter(description = "Field to sort by")
+            @Parameter(description = "Entity field used for sorting",
+                    schema = @Schema(allowableValues = {"id", "title", "description", "body", "createdAt", "updatedAt"}),
+                    example = "title")
             @RequestParam(value = "orderBy", defaultValue = "title") String orderBy,
-            @Parameter(description = "Sort direction (ASC or DESC)")
-            @RequestParam(value = "direction", defaultValue = "ASC") String direction) {
+            @Parameter(description = "Sort direction",
+                    schema = @Schema(allowableValues = {"ASC", "DESC"}),
+                    example = "ASC")
+            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+            @Parameter(description = "Filter posts from this date (format: yyyy-MM-dd)")
+            @RequestParam(value = "startDate", required = false) LocalDate startDate,
+            @Parameter(description = "Filter posts until this date (format: yyyy-MM-dd)")
+            @RequestParam(value = "endDate", required = false) LocalDate endDate) {
 
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), orderBy));
 
-        PageResponseDTO<PostResponseDTO> posts = postService.listPosts(pageable);
+        PageResponseDTO<PostResponseDTO> posts = postService.listPosts(pageable, startDate, endDate);
         return ResponseEntity.ok().body(posts);
     }
 
