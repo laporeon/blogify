@@ -5,7 +5,6 @@ import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.response.PostResponseDTO;
 import com.laporeon.posts_api.entities.Post;
 import com.laporeon.posts_api.exceptions.PostNotFoundException;
-import com.laporeon.posts_api.mappers.PageMapper;
 import com.laporeon.posts_api.mappers.PostMapper;
 import com.laporeon.posts_api.repositories.PostRepository;
 import org.bson.types.ObjectId;
@@ -40,9 +39,6 @@ public class PostServiceTest {
 
     @Mock
     private PostMapper postMapper;
-
-    @Mock
-    private PageMapper pageMapper;
 
     @InjectMocks
     private PostService postService;
@@ -89,7 +85,7 @@ public class PostServiceTest {
 
         when(postMapper.toEntity(any(PostRequestDTO.class))).thenReturn(mockedPostEntity);
         when(postRepository.save(any(Post.class))).thenReturn(mockedPostEntity);
-        when(postMapper.toDTO(any(Post.class))).thenReturn(mockedPostResponse);
+        when(postMapper.toResponseDTO(any(Post.class))).thenReturn(mockedPostResponse);
 
         PostResponseDTO response = postService.create(requestDTO);
 
@@ -108,11 +104,10 @@ public class PostServiceTest {
         List<Post> mockedPostsList = List.of(mockedPostEntity);
         Page<Post> expectedPage = new PageImpl<>(mockedPostsList, pageable, mockedPostsList.size());
 
-        List<PostResponseDTO> mockedResponseList = List.of(mockedPostResponse);
         PageResponseDTO<PostResponseDTO> mockedPageResponse = new PageResponseDTO<>(
                 expectedPage.getContent()
                             .stream()
-                            .map(postMapper::toDTO)
+                            .map(postMapper::toResponseDTO)
                             .toList(),
                 expectedPage.getNumber(),
                 expectedPage.getSize(),
@@ -127,9 +122,9 @@ public class PostServiceTest {
         );
 
         when(postRepository.findAll(pageable)).thenReturn(expectedPage);
-        when(pageMapper.toDTO(any(Page.class))).thenReturn(mockedPageResponse);
+        when(postMapper.toPageResponseDTO(any(Page.class))).thenReturn(mockedPageResponse);
 
-        PageResponseDTO<PostResponseDTO> result = postService.listPosts(pageable);
+        PageResponseDTO<PostResponseDTO> result = postService.listPosts(pageable, null, null);
 
         assertThat(result.totalElements()).isEqualTo(1);
         assertThat(result.content()).hasSize(1);
@@ -143,7 +138,7 @@ public class PostServiceTest {
         Pageable pageable = PageRequest.of(DEFAULT_PAGE, DEFAULT_SIZE);
         Page<Post> emptyPage = new PageImpl<>(List.of(), pageable, 0);
         PageResponseDTO<PostResponseDTO> emptyResponse = new PageResponseDTO<>(
-                emptyPage.getContent().stream().map(postMapper::toDTO).toList(),
+                emptyPage.getContent().stream().map(postMapper::toResponseDTO).toList(),
                 emptyPage.getNumber(),
                 emptyPage.getSize(),
                 emptyPage.getTotalPages(),
@@ -157,9 +152,9 @@ public class PostServiceTest {
         );
 
         when(postRepository.findAll(pageable)).thenReturn(emptyPage);
-        when(pageMapper.toDTO(any(Page.class))).thenReturn(emptyResponse);
+        when(postMapper.toPageResponseDTO(any(Page.class))).thenReturn(emptyResponse);
 
-        PageResponseDTO<PostResponseDTO> result = postService.listPosts(pageable);
+        PageResponseDTO<PostResponseDTO> result = postService.listPosts(pageable, null, null);
 
         assertThat(result.content()).isEmpty();
         assertThat(result.totalElements()).isZero();
@@ -172,7 +167,7 @@ public class PostServiceTest {
     @DisplayName("Should return post when given existing id")
     void shouldReturnPostWhenGivenExistingId() {
         when(postRepository.findById(mockedPostEntity.getId())).thenReturn(Optional.of(mockedPostEntity));
-        when(postMapper.toDTO(any(Post.class))).thenReturn(mockedPostResponse);
+        when(postMapper.toResponseDTO(any(Post.class))).thenReturn(mockedPostResponse);
 
         PostResponseDTO sut = postService.findById(mockedPostEntity.getId());
 
@@ -198,11 +193,10 @@ public class PostServiceTest {
     @Test
     @DisplayName("Should successfully update post when given existing id and valid request data")
     void shouldUpdatePostWhenGivenExistingIdAndValidRequestData() {
-        PostRequestDTO requestDTO = new PostRequestDTO(VALID_TITLE, VALID_DESCRIPTION, VALID_BODY);
+        PostRequestDTO requestDTO = new PostRequestDTO(null, VALID_DESCRIPTION, null);
 
         when(postRepository.findById(mockedPostEntity.getId())).thenReturn(Optional.of(mockedPostEntity));
-        when(postMapper.updateEntityFromDTO(any(PostRequestDTO.class), any(Post.class))).thenReturn(mockedPostEntity);
-        when(postMapper.toDTO(any(Post.class))).thenReturn(mockedPostResponse);
+        when(postMapper.toResponseDTO(any(Post.class))).thenReturn(mockedPostResponse);
         when(postRepository.save(any(Post.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
