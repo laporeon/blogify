@@ -1,14 +1,16 @@
 package com.laporeon.posts_api.mappers;
 
 import com.laporeon.posts_api.dto.request.PostRequestDTO;
+import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.response.PostResponseDTO;
 import com.laporeon.posts_api.entities.Post;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PostMapper {
 
-    public PostResponseDTO toDTO(Post post) {
+    public PostResponseDTO toResponseDTO(Post post) {
         return new PostResponseDTO(
                 post.getId(),
                 post.getTitle(),
@@ -28,10 +30,20 @@ public class PostMapper {
                 .build();
     }
 
-    public Post updateEntityFromDTO(PostRequestDTO dto, Post post) {
-        post.setTitle(dto.title());
-        post.setDescription(dto.description());
-        post.setBody(dto.body());
-        return post;
+    public PageResponseDTO<PostResponseDTO> toPageResponseDTO(Page<Post> posts) {
+        return new PageResponseDTO<>(
+                posts.getContent().stream().map(this::toResponseDTO).toList(),
+                posts.getNumber(),
+                posts.getSize(),
+                posts.getTotalPages(),
+                posts.getTotalElements(),
+                posts.getNumberOfElements(),
+                posts.isFirst(),
+                posts.isLast(),
+                posts.isEmpty(),
+                posts.getSort().isSorted(),
+                posts.getSort().isUnsorted()
+        );
     }
+
 }

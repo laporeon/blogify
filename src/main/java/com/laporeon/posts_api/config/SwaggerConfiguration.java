@@ -14,7 +14,7 @@ public class SwaggerConfiguration {
                 .info(
                         new Info()
                                 .title("Posts API")
-                                .description(" A REST API for personal blog posts management..")
+                                .description(" A REST API for personal blog posts management.")
                                 .version("1.0.0"));
     }
 

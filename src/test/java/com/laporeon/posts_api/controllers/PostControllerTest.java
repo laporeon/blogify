@@ -142,7 +142,7 @@ class PostControllerTest {
                 false
         );
 
-        when(postService.listPosts(any(Pageable.class))).thenReturn(pageResponse);
+        when(postService.listPosts(any(Pageable.class), any(), any())).thenReturn(pageResponse);
 
         mockMvc.perform(get(POSTS_ENDPOINT)
                                 .param("page", String.valueOf(DEFAULT_PAGE))
@@ -172,7 +172,7 @@ class PostControllerTest {
                 false
         );
 
-        when(postService.listPosts(any(Pageable.class))).thenReturn(emptyPage);
+        when(postService.listPosts(any(Pageable.class), any(), any())).thenReturn(emptyPage);
 
         mockMvc.perform(get(POSTS_ENDPOINT))
                .andExpect(status().isOk())
