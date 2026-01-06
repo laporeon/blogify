@@ -2,7 +2,7 @@
 
 ![java](https://img.shields.io/static/v1?label=java&message=21.0.8&color=2d3748&logo=openjdk&style=flat-square)
 ![spring boot](https://img.shields.io/static/v1?label=spring%20boot&message=3.5.4&color=2d3748&logo=springboot&style=flat-square)
-![mongodb](https://img.shields.io/badge/mongodb-latest-4b32c3?style=flat-square&logo=mongodb)
+![mongodb](https://img.shields.io/badge/mongodb-8.0.17-4b32c3?style=flat-square&logo=mongodb&color=2d3748)
 ![docker](https://img.shields.io/static/v1?label=docker&message=28.5.0&color=2d3748&logo=docker&style=flat-square)
 
 </h1>
@@ -64,7 +64,6 @@ Rename  `.env.example` to `.env` and modify variables according to your needs.
 | MONGO_PASSWORD | Optional (Default: "dbpassword") | **Required**                | MongoDB password |
 | MONGO_DATABASE       | Optional (Default: "posts")      | Optional (Default: "posts") | MongoDB database |
 
-              | posts     | Database name    |
 ## Usage
 
 ### **Starting**
@@ -80,14 +79,14 @@ Access the application at `http://localhost:8080/api/v1/posts` (or the port you 
 
 ### **Routes**
 
-| Route        | HTTP Method | Params                                                                                                                                                                                                         | Description                              | Auth Method |
-|--------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|-------------|
-| `/docs`      | GET         | -                                                                                                                                                                                                              | Swagger documentation                    | None        |
-| `/api/v1/posts` | POST        | Body with `title`, `description` and `body`.                                                                                                                                                                   | Create a new post                        | None        |
-| `/api/v1/posts` | GET         | **Query Parameters:**<br>• `page` - Page number (default: 0)<br>• `size` - Page size (default: 10)<br>• `orderBy` - Sort field (default: "title")<br>• `direction` - Sort direction: ASC/DESC (default: "ASC") | Retrieve paginated posts with sorting    | None        |
-| `/api/v1/posts/:id` | GET         | `:id`                                                                                                                                                                                                          | Retrieve existing post by its unique id. | None        |
-| `/api/v1/posts/:id` | PUT         | `:id` + Body with `title`, `description` and `body`.                                                                                                                                                           | Update post information                  | None        |
-| `/api/v1/posts/:id` | DELETE      | `:id`                                                                                                                                                                                                          | Delete an existing post.                 | None        |
+| Route        | HTTP Method | Params                                                                                                                                                                                                                                                                                                                                               | Description                              | Auth Method |
+|--------------|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------|-------------|
+| `/docs`      | GET         | -                                                                                                                                                                                                                                                                                                                                                    | Swagger documentation                    | None        |
+| `/api/v1/posts` | POST        | Body with `title`, `description` and `body`.                                                                                                                                                                                                                                                                                                         | Create a new post                        | None        |
+| `/api/v1/posts` | GET         | **Query Parameters:**<br>• `page` - Page number (default: 0)<br>• `size` - Page size (default: 10)<br>• `orderBy` - Sort field (default: "name")<br>• `direction` - Sort direction: ASC/DESC (default: "ASC")<br>• `startDate` - Filter posts from this date (format: yyyy-MM-dd)<br>• `endDate` - Filter posts until this date (format: yyyy-MM-dd) | Retrieve paginated posts with sorting    | None        |
+| `/api/v1/posts/:id` | GET         | `:id`                                                                                                                                                                                                                                                                                                                                                | Retrieve existing post by its unique id. | None        |
+| `/api/v1/posts/:id` | PUT         | `:id` + Body with fields to be updated (title, body and/or description)                                                                                                                                                                                                                                                                              | Update post information                  | None        |
+| `/api/v1/posts/:id` | DELETE      | `:id`                                                                                                                                                                                                                                                                                                                                                | Delete an existing post.                 | None        |
 
 #### Requests
 
@@ -109,9 +108,7 @@ Request body:
 
 ```json
 {
-  "title": "Getting Started with Spring Boot",
-  "description": "A comprehensive guide to building REST APIs with Spring Boot framework.",
-  "body": "Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications."
+  "title": "Getting Started with Spring Boot 4"
 }
 ```
 
