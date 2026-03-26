@@ -1,6 +1,7 @@
 package com.laporeon.posts_api.controllers;
 
 import com.laporeon.posts_api.dto.request.PostRequestDTO;
+import com.laporeon.posts_api.dto.request.PostUpdateDTO;
 import com.laporeon.posts_api.dto.response.ErrorResponseDTO;
 import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.response.PostResponseDTO;
@@ -41,8 +42,8 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.POST_SUCCESS_RESPONSE))),
-                    @ApiResponse(responseCode = "400", description = "Request validation failed for one or more fields",
+                                    examples = @ExampleObject(value = SwaggerExamples.CREATE_POST_SUCCESS_RESPONSE))),
+                    @ApiResponse(responseCode = "400", description = "Request validation failed",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
@@ -51,7 +52,7 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
             }
     )
     @PostMapping
@@ -68,12 +69,12 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PageResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.POSTS_PAGE_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerExamples.LIST_POSTS_PAGE_RESPONSE))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
             }
     )
     @GetMapping
@@ -109,17 +110,17 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.POST_SUCCESS_RESPONSE))),
-                    @ApiResponse(responseCode = "404", description = "Post not found",
+                                    examples = @ExampleObject(value = SwaggerExamples.LIST_POSTS_PAGE_RESPONSE))),
+                    @ApiResponse(responseCode = "404", description = "Resource not found",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.POST_NOT_FOUND_ERROR))),
+                                    examples = @ExampleObject(value = SwaggerExamples.NOT_FOUND_ERROR))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
             }
     )
     @GetMapping("/{id}")
@@ -136,7 +137,7 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.POST_SUCCESS_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerExamples.CREATE_POST_SUCCESS_RESPONSE))),
                     @ApiResponse(responseCode = "400", description = "Request validation failed for one or more fields",
                             content = @Content(
                                     mediaType = "application/json",
@@ -146,14 +147,14 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
             }
     )
     @PutMapping("/{id}")
     public ResponseEntity<PostResponseDTO> update(
             @PathVariable("id") String id,
-            @Valid @RequestBody PostRequestDTO postRequestDTO) {
-        PostResponseDTO postResponseDTO = postService.update(id, postRequestDTO);
+            @Valid @RequestBody PostUpdateDTO postUpdateDTO) {
+        PostResponseDTO postResponseDTO = postService.update(id, postUpdateDTO);
         return ResponseEntity.ok().body(postResponseDTO);
     }
 
@@ -162,16 +163,16 @@ public class PostController {
             description = "Deletes a post based on its unique ID. Returns 404 if post not found.",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Post successfully deleted"),
-                    @ApiResponse(responseCode = "404", description = "Post not found",
+                    @ApiResponse(responseCode = "404", description = "Resource not found",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.POST_NOT_FOUND_ERROR))),
+                                    examples = @ExampleObject(value = SwaggerExamples.NOT_FOUND_ERROR))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
             }
     )
     @DeleteMapping("/{id}")
