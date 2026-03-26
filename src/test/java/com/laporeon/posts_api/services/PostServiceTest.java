@@ -1,10 +1,11 @@
 package com.laporeon.posts_api.services;
 
 import com.laporeon.posts_api.dto.request.PostRequestDTO;
+import com.laporeon.posts_api.dto.request.PostUpdateDTO;
 import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.response.PostResponseDTO;
 import com.laporeon.posts_api.entities.Post;
-import com.laporeon.posts_api.exceptions.PostNotFoundException;
+import com.laporeon.posts_api.exceptions.custom.PostNotFoundException;
 import com.laporeon.posts_api.mappers.PostMapper;
 import com.laporeon.posts_api.repositories.PostRepository;
 import org.bson.types.ObjectId;
@@ -51,13 +52,11 @@ public class PostServiceTest {
 
     private Post mockedPostEntity;
     private PostResponseDTO mockedPostResponse;
-    private Instant createdAt;
-    private Instant updatedAt;
 
     @BeforeEach
     void setUp() {
-        createdAt = Instant.now().minus(1, ChronoUnit.DAYS);
-        updatedAt = Instant.now();
+        Instant createdAt = Instant.now().minus(1, ChronoUnit.DAYS);
+        Instant updatedAt = Instant.now();
 
         mockedPostEntity = Post.builder()
                                .id(new ObjectId().toString())
@@ -193,7 +192,7 @@ public class PostServiceTest {
     @Test
     @DisplayName("Should successfully update post when given existing id and valid request data")
     void shouldUpdatePostWhenGivenExistingIdAndValidRequestData() {
-        PostRequestDTO requestDTO = new PostRequestDTO(null, VALID_DESCRIPTION, null);
+        PostUpdateDTO requestDTO = new PostUpdateDTO(null, VALID_DESCRIPTION, null);
 
         when(postRepository.findById(mockedPostEntity.getId())).thenReturn(Optional.of(mockedPostEntity));
         when(postMapper.toResponseDTO(any(Post.class))).thenReturn(mockedPostResponse);
@@ -216,7 +215,7 @@ public class PostServiceTest {
     @DisplayName("Should throw PostNotFoundException when updating post with non existing id")
     void shouldThrowPostNotFoundExceptionWhenUpdatingPostWithNonExistingId() {
         String invalidId = "68e0234a70424186e056e45f";
-        PostRequestDTO requestDTO = new PostRequestDTO(VALID_TITLE, VALID_DESCRIPTION, VALID_BODY);
+        PostUpdateDTO requestDTO = new PostUpdateDTO(VALID_TITLE, VALID_DESCRIPTION, VALID_BODY);
 
         when(postRepository.findById(invalidId)).thenReturn(Optional.empty());
 

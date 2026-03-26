@@ -1,8 +1,9 @@
 package com.laporeon.posts_api.entities;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -13,10 +14,10 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.time.Instant;
 
 @Document(collection = "posts")
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Post {
 
     @MongoId
@@ -35,5 +36,11 @@ public class Post {
     @LastModifiedDate
     @Field("updated_at")
     private Instant updatedAt;
+
+    public void update(String title, String description, String body) {
+        if (title != null) this.title = title;
+        if (description != null) this.description = description;
+        if (body != null) this.body = body;
+    }
 
 }

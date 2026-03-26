@@ -2,7 +2,7 @@ package com.laporeon.posts_api.utils;
 
 public class SwaggerExamples {
 
-    public static final String POST_SUCCESS_RESPONSE = """
+    public static final String CREATE_POST_SUCCESS_RESPONSE = """
             {
                 "id": "507f1f77bcf86cd799439011",
                 "title": "Getting Started with Spring Boot",
@@ -13,7 +13,7 @@ public class SwaggerExamples {
             }
             """;
 
-    public static final String POSTS_PAGE_RESPONSE = """
+    public static final String LIST_POSTS_PAGE_RESPONSE = """
             {
                 "content": [
                     {
@@ -77,7 +77,7 @@ public class SwaggerExamples {
             }
             """;
 
-    public static final String POST_NOT_FOUND_ERROR = """
+    public static final String NOT_FOUND_ERROR = """
             {
               "status": 404,
               "message": "Post with id 6942e984836f586fa47e52ff not found.",
@@ -85,7 +85,7 @@ public class SwaggerExamples {
             }
             """;
 
-    public static final String SERVER_ERROR = """
+    public static final String INTERNAL_SERVER_ERROR = """
             {
               "status": 500,
               "message": "An unexpected error occurred",

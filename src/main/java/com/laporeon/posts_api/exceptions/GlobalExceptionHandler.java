@@ -2,6 +2,7 @@ package com.laporeon.posts_api.exceptions;
 
 import com.laporeon.posts_api.dto.response.ErrorResponseDTO;
 import com.laporeon.posts_api.dto.response.ValidationErrorResponseDTO;
+import com.laporeon.posts_api.exceptions.custom.PostNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class GlobalExceptionHandler {
 
         ValidationErrorResponseDTO error = new ValidationErrorResponseDTO(
                 HttpStatus.BAD_REQUEST.value(),
-                "Validation Error",
+                "VALIDATION_ERROR",
                 "Request validation failed for one or more fields",
                 errors,
                 Instant.now());
@@ -45,6 +46,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handlePostNotFoundException(PostNotFoundException ex) {
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.NOT_FOUND.value(),
+                "NOT_FOUND_ERROR",
                 ex.getMessage(),
                 Instant.now()
         );
@@ -58,6 +60,7 @@ public class GlobalExceptionHandler {
 
         ErrorResponseDTO error = new ErrorResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "INTERNAL_SERVER_ERROR",
                 "An unexpected error occurred",
                 Instant.now());
 

@@ -2,9 +2,10 @@ package com.laporeon.posts_api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.laporeon.posts_api.dto.request.PostRequestDTO;
+import com.laporeon.posts_api.dto.request.PostUpdateDTO;
 import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.response.PostResponseDTO;
-import com.laporeon.posts_api.exceptions.PostNotFoundException;
+import com.laporeon.posts_api.exceptions.custom.PostNotFoundException;
 import com.laporeon.posts_api.services.PostService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,14 +52,12 @@ class PostControllerTest {
 
     private PostResponseDTO mockedPostResponse;
     private String validPostId;
-    private Instant createdAt;
-    private Instant updatedAt;
 
     @BeforeEach
     void setUp() {
         validPostId = new ObjectId().toString();
-        createdAt = Instant.now().minus(1, ChronoUnit.DAYS);
-        updatedAt = Instant.now();
+        Instant createdAt = Instant.now().minus(1, ChronoUnit.DAYS);
+        Instant updatedAt = Instant.now();
 
         mockedPostResponse = new PostResponseDTO(
                 validPostId,
@@ -206,9 +205,9 @@ class PostControllerTest {
     @Test
     @DisplayName("PUT /api/v1/posts/{id} - Should return 200 when updating post with existing id and valid request data")
     void shouldReturn200WhenUpdatingPostWithExistingIdAndValidRequestData() throws Exception {
-        PostRequestDTO validRequest = new PostRequestDTO(VALID_TITLE, VALID_DESCRIPTION, VALID_BODY);
+        PostUpdateDTO validRequest = new PostUpdateDTO(VALID_TITLE, null, null);
 
-        when(postService.update(eq(validPostId), any(PostRequestDTO.class)))
+        when(postService.update(eq(validPostId), any(PostUpdateDTO.class)))
                 .thenReturn(mockedPostResponse);
 
         mockMvc.perform(put(POSTS_ENDPOINT + "/" + validPostId)
@@ -225,7 +224,7 @@ class PostControllerTest {
     @DisplayName("PUT /api/v1/posts/{id} - Should return 404 when updating post with non existing id")
     void shouldReturn404WhenGivenNonExistingId() throws Exception {
         String invalidId = "68e0124a70424186e056e45d";
-        PostRequestDTO validRequest = new PostRequestDTO(VALID_TITLE, VALID_DESCRIPTION, VALID_BODY);
+        PostUpdateDTO validRequest = new PostUpdateDTO(VALID_TITLE, null, null);
 
         doThrow(new PostNotFoundException(invalidId))
                 .when(postService)

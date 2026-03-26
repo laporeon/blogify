@@ -22,7 +22,7 @@ public class PostMapper {
     }
 
     public Post toEntity(PostRequestDTO dto) {
-        return new Post()
+        return Post
                 .builder()
                 .title(dto.title())
                 .description(dto.description())
