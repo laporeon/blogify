@@ -6,7 +6,7 @@ import java.util.Map;
 
 public record ValidationErrorResponseDTO(
         int status,
-        String error,
+        String type,
         String message,
         List<Map<String, String>> errors,
         Instant timestamp
