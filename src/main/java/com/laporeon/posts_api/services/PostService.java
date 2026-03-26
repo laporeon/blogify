@@ -1,12 +1,14 @@
 package com.laporeon.posts_api.services;
 
 import com.laporeon.posts_api.dto.request.PostRequestDTO;
+import com.laporeon.posts_api.dto.request.PostUpdateDTO;
 import com.laporeon.posts_api.dto.response.PageResponseDTO;
 import com.laporeon.posts_api.dto.response.PostResponseDTO;
 import com.laporeon.posts_api.entities.Post;
-import com.laporeon.posts_api.exceptions.PostNotFoundException;
+import com.laporeon.posts_api.exceptions.custom.PostNotFoundException;
 import com.laporeon.posts_api.mappers.PostMapper;
 import com.laporeon.posts_api.repositories.PostRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,10 +50,10 @@ public class PostService {
         return postMapper.toResponseDTO(post);
     }
 
-    public PostResponseDTO update(String id, PostRequestDTO dto) {
+    public PostResponseDTO update(String id, @Valid PostUpdateDTO dto) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 
-        applyUpdates(post, dto);
+        post.update(dto.title(), dto.description(), dto.body());
 
         postRepository.save(post);
 
@@ -64,10 +66,6 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    private void applyUpdates(Post post, PostRequestDTO dto) {
-        if (dto.title() != null) post.setTitle(dto.title());
-        if (dto.description() != null) post.setDescription(dto.description());
-        if (dto.body() != null) post.setBody(dto.body());
-    }
+
 
 }
