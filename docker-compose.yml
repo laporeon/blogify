@@ -1,42 +1,40 @@
-version: '3.8'
-
 services:
   mongodb:
-    container_name: posts-api-database
+    container_name: splog-api-database
     image: mongo:8.0.17-noble
     restart: unless-stopped
     ports:
       - "27018:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-trademap}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-dbpassword}
     volumes:
-      - mongodb_data:/data/db
+      - splog_mongodb_data:/data/db
     networks:
-      - posts-api-network
+      - splog-api-network
 
   app:
     build: .
-    container_name: posts-api
+    container_name: splog-api
     ports:
       - "${PORT:-8080}:${PORT:-8080}"
     environment:
       PORT: ${PORT:-8080}
       MONGO_HOST: mongodb
       MONGO_PORT: 27017
-      MONGO_USER: ${MONGO_USER:-trademap}
+      MONGO_USER: ${MONGO_USER:-admin}
       MONGO_PASSWORD: ${MONGO_PASSWORD:-dbpassword}
-      MONGO_DATABASE: ${MONGO_DATABASE:-posts}
+      MONGO_DATABASE: ${MONGO_DATABASE:-splog}
     depends_on:
       - mongodb
     networks:
-      - posts-api-network
+      - splog-api-network
 
 volumes:
-  mongodb_data:
+  splog_mongodb_data:
     driver: local
 
 networks:
-  posts-api-network:
-    name: posts-api-network
+  splog-api-network:
+    name: splog-api-network
     driver: bridge

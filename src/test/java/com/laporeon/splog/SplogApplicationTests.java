@@ -1,0 +1,13 @@
+package com.laporeon.splog;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class SplogApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
