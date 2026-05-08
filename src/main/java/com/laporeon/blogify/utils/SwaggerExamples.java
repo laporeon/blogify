@@ -1,4 +1,4 @@
-package com.laporeon.splog.utils;
+package com.laporeon.blogify.utils;
 
 public class SwaggerExamples {
 

@@ -1,6 +1,6 @@
-package com.laporeon.splog.repositories;
+package com.laporeon.blogify.repositories;
 
-import com.laporeon.splog.entities.Post;
+import com.laporeon.blogify.entities.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;

@@ -1,4 +1,4 @@
-package com.laporeon.splog;
+package com.laporeon.blogify;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

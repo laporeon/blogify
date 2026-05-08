@@ -1,4 +1,4 @@
-package com.laporeon.splog;
+package com.laporeon.blogify;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

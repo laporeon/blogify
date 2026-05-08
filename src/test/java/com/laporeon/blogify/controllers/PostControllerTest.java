@@ -1,12 +1,12 @@
-package com.laporeon.splog.controllers;
+package com.laporeon.blogify.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.laporeon.splog.dto.request.PostRequestDTO;
-import com.laporeon.splog.dto.request.PostUpdateDTO;
-import com.laporeon.splog.dto.response.PageResponseDTO;
-import com.laporeon.splog.dto.response.PostResponseDTO;
-import com.laporeon.splog.exceptions.custom.PostNotFoundException;
-import com.laporeon.splog.services.PostService;
+import com.laporeon.blogify.dto.request.PostRequestDTO;
+import com.laporeon.blogify.dto.request.PostUpdateDTO;
+import com.laporeon.blogify.dto.response.PageResponseDTO;
+import com.laporeon.blogify.dto.response.PostResponseDTO;
+import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
+import com.laporeon.blogify.services.PostService;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

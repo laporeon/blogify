@@ -1,4 +1,4 @@
-package com.laporeon.splog.entities;
+package com.laporeon.blogify.entities;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

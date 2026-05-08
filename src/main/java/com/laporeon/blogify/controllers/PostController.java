@@ -1,12 +1,12 @@
-package com.laporeon.splog.controllers;
+package com.laporeon.blogify.controllers;
 
-import com.laporeon.splog.dto.request.PostRequestDTO;
-import com.laporeon.splog.dto.request.PostUpdateDTO;
-import com.laporeon.splog.dto.response.ErrorResponseDTO;
-import com.laporeon.splog.dto.response.PageResponseDTO;
-import com.laporeon.splog.dto.response.PostResponseDTO;
-import com.laporeon.splog.services.PostService;
-import com.laporeon.splog.utils.SwaggerExamples;
+import com.laporeon.blogify.dto.request.PostRequestDTO;
+import com.laporeon.blogify.dto.request.PostUpdateDTO;
+import com.laporeon.blogify.dto.response.ErrorResponseDTO;
+import com.laporeon.blogify.dto.response.PageResponseDTO;
+import com.laporeon.blogify.dto.response.PostResponseDTO;
+import com.laporeon.blogify.services.PostService;
+import com.laporeon.blogify.utils.SwaggerExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -1,4 +1,4 @@
-package com.laporeon.splog.dto.response;
+package com.laporeon.blogify.dto.response;
 
 import java.time.Instant;
 import java.util.List;

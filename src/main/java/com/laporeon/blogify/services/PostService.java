@@ -1,13 +1,13 @@
-package com.laporeon.splog.services;
+package com.laporeon.blogify.services;
 
-import com.laporeon.splog.dto.request.PostRequestDTO;
-import com.laporeon.splog.dto.request.PostUpdateDTO;
-import com.laporeon.splog.dto.response.PageResponseDTO;
-import com.laporeon.splog.dto.response.PostResponseDTO;
-import com.laporeon.splog.entities.Post;
-import com.laporeon.splog.exceptions.custom.PostNotFoundException;
-import com.laporeon.splog.mappers.PostMapper;
-import com.laporeon.splog.repositories.PostRepository;
+import com.laporeon.blogify.dto.request.PostRequestDTO;
+import com.laporeon.blogify.dto.request.PostUpdateDTO;
+import com.laporeon.blogify.dto.response.PageResponseDTO;
+import com.laporeon.blogify.dto.response.PostResponseDTO;
+import com.laporeon.blogify.entities.Post;
+import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
+import com.laporeon.blogify.mappers.PostMapper;
+import com.laporeon.blogify.repositories.PostRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

@@ -1,9 +1,9 @@
-package com.laporeon.splog.mappers;
+package com.laporeon.blogify.mappers;
 
-import com.laporeon.splog.dto.request.PostRequestDTO;
-import com.laporeon.splog.dto.response.PageResponseDTO;
-import com.laporeon.splog.dto.response.PostResponseDTO;
-import com.laporeon.splog.entities.Post;
+import com.laporeon.blogify.dto.request.PostRequestDTO;
+import com.laporeon.blogify.dto.response.PageResponseDTO;
+import com.laporeon.blogify.dto.response.PostResponseDTO;
+import com.laporeon.blogify.entities.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

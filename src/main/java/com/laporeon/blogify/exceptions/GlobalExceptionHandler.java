@@ -1,8 +1,8 @@
-package com.laporeon.splog.exceptions;
+package com.laporeon.blogify.exceptions;
 
-import com.laporeon.splog.dto.response.ErrorResponseDTO;
-import com.laporeon.splog.dto.response.ValidationErrorResponseDTO;
-import com.laporeon.splog.exceptions.custom.PostNotFoundException;
+import com.laporeon.blogify.dto.response.ErrorResponseDTO;
+import com.laporeon.blogify.dto.response.ValidationErrorResponseDTO;
+import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
