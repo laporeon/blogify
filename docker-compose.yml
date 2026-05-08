@@ -1,6 +1,8 @@
+name: blogify
+
 services:
   mongodb:
-    container_name: splog-api-database
+    container_name: blogify-api-database
     image: mongo:8.0.17-noble
     restart: unless-stopped
     ports:
@@ -9,32 +11,40 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-dbpassword}
     volumes:
-      - splog_mongodb_data:/data/db
+      - mongodb_data:/data/db
     networks:
-      - splog-api-network
+      - blogify-api-network
+    healthcheck:
+      test: [ "CMD", "mongosh", "--eval", "db.runCommand('ping').ok" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
   app:
     build: .
-    container_name: splog-api
+    container_name: blogify-api
     ports:
       - "${PORT:-8080}:${PORT:-8080}"
     environment:
+      SPRING_PROFILES_ACTIVE: dev
       PORT: ${PORT:-8080}
       MONGO_HOST: mongodb
       MONGO_PORT: 27017
       MONGO_USER: ${MONGO_USER:-admin}
       MONGO_PASSWORD: ${MONGO_PASSWORD:-dbpassword}
-      MONGO_DATABASE: ${MONGO_DATABASE:-splog}
+      MONGO_DATABASE: ${MONGO_DATABASE:-blogifydb}
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
     networks:
-      - splog-api-network
+      - blogify-api-network
 
 volumes:
-  splog_mongodb_data:
+  mongodb_data:
     driver: local
 
 networks:
-  splog-api-network:
-    name: splog-api-network
+  blogify-api-network:
+    name: blogify-api-network
     driver: bridge
