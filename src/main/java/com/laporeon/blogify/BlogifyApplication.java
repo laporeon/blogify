@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SplogApplication {
+public class BlogifyApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SplogApplication.class, args);
+		SpringApplication.run(BlogifyApplication.class, args);
 	}
 
 }

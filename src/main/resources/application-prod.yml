@@ -1,0 +1,23 @@
+# ====== DATABASE CONFIGURATION =====
+spring:
+  mongodb:
+    uri: ${MONGO_URI}
+
+# ====== LOGGING CONFIGURATION ===
+logging:
+  level:
+    com:
+      laporeon: INFO
+    org:
+      mongodb:
+        driver: WARN
+      springframework:
+        data:
+          mongodb:
+            core: WARN
+
+# ====== ACTUATOR CONFIGURATION ===
+management:
+  endpoint:
+    health:
+      show-details: never

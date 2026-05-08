@@ -1,0 +1,32 @@
+# ====== ENVIRONMENT =====
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+# ====== DATABASE CONFIGURATION =====
+  mongodb:
+    host: ${MONGO_HOST:localhost}
+    port: ${MONGO_PORT:27017}
+    database: ${MONGO_DATABASE:bloggerdb}
+    username: ${MONGO_USER}
+    password: ${MONGO_PASSWORD}
+
+# ====== LOGGING CONFIGURATION ===
+logging:
+  level:
+    com:
+      laporeon: DEBUG
+    org:
+      mongodb:
+        driver: DEBUG
+      springframework:
+        data:
+          mongodb:
+            core: DEBUG
+
+
+# ====== ACTUATOR CONFIGURATION ===
+management:
+  endpoint:
+    health:
+      show-details: always
