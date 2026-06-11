@@ -2,6 +2,7 @@ package com.laporeon.blogify.exceptions;
 
 import com.laporeon.blogify.dto.response.ErrorResponseDTO;
 import com.laporeon.blogify.dto.response.ValidationErrorResponseDTO;
+import com.laporeon.blogify.exceptions.custom.InvalidArgumentException;
 import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,18 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    public ResponseEntity<ErrorResponseDTO> handleInvalidArgumentException(InvalidArgumentException ex) {
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                HttpStatus.UNPROCESSABLE_CONTENT.value(),
+                "INVALID_ARGUMENT_ERROR",
+                ex.getMessage(),
+                Instant.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(error);
     }
 
     @ExceptionHandler(Exception.class)
