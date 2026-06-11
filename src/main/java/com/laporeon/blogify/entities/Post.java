@@ -3,7 +3,7 @@ package com.laporeon.blogify.entities;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,7 +15,7 @@ import java.time.Instant;
 
 @Document(collection = "posts")
 @Builder
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Post {
@@ -36,11 +36,5 @@ public class Post {
     @LastModifiedDate
     @Field("updated_at")
     private Instant updatedAt;
-
-    public void update(String title, String description, String body) {
-        if (title != null) this.title = title;
-        if (description != null) this.description = description;
-        if (body != null) this.body = body;
-    }
 
 }
