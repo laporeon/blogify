@@ -1,12 +1,12 @@
 package com.laporeon.blogify.controllers;
 
+import com.laporeon.blogify.controllers.docs.SwaggerVariables;
 import com.laporeon.blogify.dto.request.PostRequestDTO;
 import com.laporeon.blogify.dto.request.PostUpdateDTO;
 import com.laporeon.blogify.dto.response.ErrorResponseDTO;
 import com.laporeon.blogify.dto.response.PageResponseDTO;
 import com.laporeon.blogify.dto.response.PostResponseDTO;
 import com.laporeon.blogify.services.PostService;
-import com.laporeon.blogify.utils.SwaggerExamples;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +21,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
 
@@ -42,17 +50,17 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.CREATE_POST_SUCCESS_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerVariables.CREATE_POST_SUCCESS_RESPONSE))),
                     @ApiResponse(responseCode = "400", description = "Request validation failed",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.VALIDATION_ERROR_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerVariables.VALIDATION_ERROR_RESPONSE))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerVariables.INTERNAL_SERVER_ERROR)))
             }
     )
     @PostMapping
@@ -69,12 +77,12 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PageResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.LIST_POSTS_PAGE_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerVariables.LIST_POSTS_PAGE_RESPONSE))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerVariables.INTERNAL_SERVER_ERROR)))
             }
     )
     @GetMapping
@@ -110,17 +118,17 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.LIST_POSTS_PAGE_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerVariables.LIST_POSTS_PAGE_RESPONSE))),
                     @ApiResponse(responseCode = "404", description = "Resource not found",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.NOT_FOUND_ERROR))),
+                                    examples = @ExampleObject(value = SwaggerVariables.NOT_FOUND_ERROR))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerVariables.INTERNAL_SERVER_ERROR)))
             }
     )
     @GetMapping("/{id}")
@@ -137,17 +145,17 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = PostResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.CREATE_POST_SUCCESS_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerVariables.CREATE_POST_SUCCESS_RESPONSE))),
                     @ApiResponse(responseCode = "400", description = "Request validation failed for one or more fields",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.VALIDATION_ERROR_RESPONSE))),
+                                    examples = @ExampleObject(value = SwaggerVariables.VALIDATION_ERROR_RESPONSE))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerVariables.INTERNAL_SERVER_ERROR)))
             }
     )
     @PutMapping("/{id}")
@@ -167,12 +175,12 @@ public class PostController {
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.NOT_FOUND_ERROR))),
+                                    examples = @ExampleObject(value = SwaggerVariables.NOT_FOUND_ERROR))),
                     @ApiResponse(responseCode = "500", description = "Internal Server Error",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ErrorResponseDTO.class),
-                                    examples = @ExampleObject(value = SwaggerExamples.INTERNAL_SERVER_ERROR)))
+                                    examples = @ExampleObject(value = SwaggerVariables.INTERNAL_SERVER_ERROR)))
             }
     )
     @DeleteMapping("/{id}")
