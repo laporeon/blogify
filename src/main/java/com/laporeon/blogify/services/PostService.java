@@ -5,6 +5,7 @@ import com.laporeon.blogify.dto.request.PostUpdateDTO;
 import com.laporeon.blogify.dto.response.PageResponseDTO;
 import com.laporeon.blogify.dto.response.PostResponseDTO;
 import com.laporeon.blogify.entities.Post;
+import com.laporeon.blogify.exceptions.custom.InvalidArgumentException;
 import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
 import com.laporeon.blogify.mappers.PostMapper;
 import com.laporeon.blogify.repositories.PostRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Service
@@ -53,7 +55,12 @@ public class PostService {
     public PostResponseDTO update(String id, @Valid PostUpdateDTO dto) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
 
-        post.update(dto.title(), dto.description(), dto.body());
+        validateUpdateOptions(dto);
+
+        if (dto.title() != null) post.setTitle(dto.title());
+        if (dto.description() != null) post.setDescription(dto.description());
+        if (dto.body() != null) post.setBody(dto.body());
+        post.setUpdatedAt(Instant.now());
 
         postRepository.save(post);
 
@@ -62,8 +69,17 @@ public class PostService {
 
     public void delete(String id) {
         postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-
         postRepository.deleteById(id);
+    }
+
+    private static void validateUpdateOptions(PostUpdateDTO dto) {
+        boolean hasTitle = dto.title() != null && !dto.title().isBlank();
+        boolean hasDescription = dto.description() != null  && !dto.description().isBlank();
+        boolean hasBody = dto.body() != null  && !dto.body().isBlank();
+
+        if (!hasTitle && !hasDescription && !hasBody) {
+            throw new InvalidArgumentException("Provide at least one field to update: title, description, or body.");
+        }
     }
 
 }
