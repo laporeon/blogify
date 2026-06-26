@@ -5,6 +5,7 @@ import com.laporeon.blogify.dto.request.PostUpdateDTO;
 import com.laporeon.blogify.dto.response.PageResponseDTO;
 import com.laporeon.blogify.dto.response.PostResponseDTO;
 import com.laporeon.blogify.entities.Post;
+import com.laporeon.blogify.exceptions.custom.InvalidArgumentException;
 import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
 import com.laporeon.blogify.mappers.PostMapper;
 import com.laporeon.blogify.repositories.PostRepository;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -50,20 +52,32 @@ public class PostService {
         return postMapper.toResponseDTO(post);
     }
 
+    @Transactional
     public PostResponseDTO update(String id, @Valid PostUpdateDTO dto) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-
-        post.update(dto.title(), dto.description(), dto.body());
-
+        validateChangesAndApply(dto, post);
         postRepository.save(post);
-
         return postMapper.toResponseDTO(post);
     }
 
+    @Transactional
     public void delete(String id) {
-        postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        postRepository.delete(post);
+    }
 
-        postRepository.deleteById(id);
+    private void validateChangesAndApply(PostUpdateDTO dto, Post post) {
+        boolean hasTitleChanged = dto.title() != null && !dto.title().isBlank() && !dto.title().equals(post.getTitle());
+        boolean hasDescriptionChanged = dto.description() != null  && !dto.description().isBlank() && !dto.description().equals(post.getDescription());
+        boolean hasBodyChanged = dto.body() != null  && !dto.body().isBlank()  && !dto.body().equals(post.getBody());
+
+        if (!hasTitleChanged && !hasDescriptionChanged && !hasBodyChanged) {
+            throw new InvalidArgumentException("No changes detected.");
+        }
+
+        if(hasTitleChanged) post.setTitle(dto.title());
+        if(hasDescriptionChanged) post.setDescription(dto.description());
+        if(hasBodyChanged) post.setBody(dto.body());
     }
 
 }

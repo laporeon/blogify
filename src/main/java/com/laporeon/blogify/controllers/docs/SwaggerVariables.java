@@ -1,6 +1,6 @@
-package com.laporeon.blogify.utils;
+package com.laporeon.blogify.controllers.docs;
 
-public class SwaggerExamples {
+public class SwaggerVariables {
 
     public static final String CREATE_POST_SUCCESS_RESPONSE = """
             {
@@ -92,4 +92,5 @@ public class SwaggerExamples {
               "timestamp": "2025-12-10T18:08:56.353210281Z"
             }
             """;
+    
 }

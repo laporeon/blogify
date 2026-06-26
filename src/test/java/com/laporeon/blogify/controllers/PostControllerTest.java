@@ -5,6 +5,7 @@ import com.laporeon.blogify.dto.request.PostRequestDTO;
 import com.laporeon.blogify.dto.request.PostUpdateDTO;
 import com.laporeon.blogify.dto.response.PageResponseDTO;
 import com.laporeon.blogify.dto.response.PostResponseDTO;
+import com.laporeon.blogify.exceptions.custom.InvalidArgumentException;
 import com.laporeon.blogify.exceptions.custom.PostNotFoundException;
 import com.laporeon.blogify.services.PostService;
 import org.bson.types.ObjectId;
@@ -51,6 +52,7 @@ class PostControllerTest {
     private static final String VALID_BODY = "Spring Boot makes it easy to create stand-alone, production-grade Spring based Applications.";
     private static final String VALIDATION_ERROR_MESSAGE = "Request validation failed for one or more fields";
     private static final String NOT_FOUND_MESSAGE = "Post with id %s not found.";
+    private static final String INVALID_UPDATE_MESSAGE = "Provide at least one field to update: title, description, or body.";
     private static final int DEFAULT_PAGE = 0;
     private static final int DEFAULT_SIZE = 10;
     private static final String POSTS_ENDPOINT = "/api/v1/posts";
@@ -186,8 +188,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/v1/posts/{id} - Should return 200 when id exists")
-    void shouldReturn200WhenIdExists() throws Exception {
+    @DisplayName("GET /api/v1/posts/{id} - Should return 200 when given existing id")
+    void shouldReturn200WhenGivenExistingId() throws Exception {
         when(postService.findById(validPostId)).thenReturn(mockedPostResponse);
 
         mockMvc.perform(get(POSTS_ENDPOINT + "/" + validPostId))
@@ -197,8 +199,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/v1/posts/{id} - Should return 404 when id does not exists")
-    void shouldReturn404WhenIdDoesNotExists() throws Exception {
+    @DisplayName("GET /api/v1/posts/{id} - Should return 404 when given non-existing id")
+    void shouldReturn404WhenGivenNonExistingId() throws Exception {
         String invalidId = "68e0124a70424186e056e45d";
 
         when(postService.findById(invalidId)).thenThrow(new PostNotFoundException(invalidId));
@@ -209,8 +211,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("PUT /api/v1/posts/{id} - Should return 200 when updating post with existing id and valid request data")
-    void shouldReturn200WhenUpdatingPostWithExistingIdAndValidRequestData() throws Exception {
+    @DisplayName("PUT /api/v1/posts/{id} - Should return 200 when updating existing post with valid request data")
+    void shouldReturn200WhenUpdatingExistingPostWitValidRequestData() throws Exception {
         PostUpdateDTO validRequest = new PostUpdateDTO(VALID_TITLE, null, null);
 
         when(postService.update(eq(validPostId), any(PostUpdateDTO.class)))
@@ -227,8 +229,24 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("PUT /api/v1/posts/{id} - Should return 404 when updating post with non existing id")
-    void shouldReturn404WhenGivenNonExistingId() throws Exception {
+    @DisplayName("PUT /api/v1/posts/{id} - Should return 422 when updating existing post with null fields")
+    void shouldReturn422WhenUpdatingExistingPostWithNullFields() throws Exception {
+        PostUpdateDTO invalidRequest = new PostUpdateDTO(null, null, null);
+
+        doThrow(new InvalidArgumentException(INVALID_UPDATE_MESSAGE))
+                .when(postService)
+                .update(validPostId, invalidRequest);
+
+        mockMvc.perform(put(POSTS_ENDPOINT + "/" + validPostId)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(invalidRequest)))
+               .andExpect(status().isUnprocessableContent())
+               .andExpect(jsonPath("$.message").value(INVALID_UPDATE_MESSAGE));
+    }
+
+    @Test
+    @DisplayName("PUT /api/v1/posts/{id} - Should return 404 when updating post with non-existing id")
+    void shouldReturn404WhenUpdatingPostWithNonExistingId() throws Exception {
         String invalidId = "68e0124a70424186e056e45d";
         PostUpdateDTO validRequest = new PostUpdateDTO(VALID_TITLE, null, null);
 
