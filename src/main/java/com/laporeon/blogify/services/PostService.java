@@ -14,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Service
@@ -52,34 +52,32 @@ public class PostService {
         return postMapper.toResponseDTO(post);
     }
 
+    @Transactional
     public PostResponseDTO update(String id, @Valid PostUpdateDTO dto) {
         Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-
-        validateUpdateOptions(dto);
-
-        if (dto.title() != null) post.setTitle(dto.title());
-        if (dto.description() != null) post.setDescription(dto.description());
-        if (dto.body() != null) post.setBody(dto.body());
-        post.setUpdatedAt(Instant.now());
-
+        validateChangesAndApply(dto, post);
         postRepository.save(post);
-
         return postMapper.toResponseDTO(post);
     }
 
+    @Transactional
     public void delete(String id) {
-        postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
-        postRepository.deleteById(id);
+        Post post = postRepository.findById(id).orElseThrow(() -> new PostNotFoundException(id));
+        postRepository.delete(post);
     }
 
-    private static void validateUpdateOptions(PostUpdateDTO dto) {
-        boolean hasTitle = dto.title() != null && !dto.title().isBlank();
-        boolean hasDescription = dto.description() != null  && !dto.description().isBlank();
-        boolean hasBody = dto.body() != null  && !dto.body().isBlank();
+    private void validateChangesAndApply(PostUpdateDTO dto, Post post) {
+        boolean hasTitleChanged = dto.title() != null && !dto.title().isBlank() && !dto.title().equals(post.getTitle());
+        boolean hasDescriptionChanged = dto.description() != null  && !dto.description().isBlank() && !dto.description().equals(post.getDescription());
+        boolean hasBodyChanged = dto.body() != null  && !dto.body().isBlank()  && !dto.body().equals(post.getBody());
 
-        if (!hasTitle && !hasDescription && !hasBody) {
-            throw new InvalidArgumentException("Provide at least one field to update: title, description, or body.");
+        if (!hasTitleChanged && !hasDescriptionChanged && !hasBodyChanged) {
+            throw new InvalidArgumentException("No changes detected.");
         }
+
+        if(hasTitleChanged) post.setTitle(dto.title());
+        if(hasDescriptionChanged) post.setDescription(dto.description());
+        if(hasBodyChanged) post.setBody(dto.body());
     }
 
 }
