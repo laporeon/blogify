@@ -347,12 +347,12 @@ public class PostServiceTest {
     @DisplayName("Should delete post when given existing id")
     void shouldDeletePostWhenGivenExistingId() {
         when(postRepository.findById(mockedPostEntity.getId())).thenReturn(Optional.of(mockedPostEntity));
-        doNothing().when(postRepository).deleteById(mockedPostEntity.getId());
+        doNothing().when(postRepository).delete(mockedPostEntity);
 
         postService.delete(mockedPostEntity.getId());
 
         verify(postRepository, times(1)).findById(mockedPostEntity.getId());
-        verify(postRepository, times(1)).deleteById(mockedPostEntity.getId());
+        verify(postRepository, times(1)).delete(mockedPostEntity);
     }
 
     @Test
@@ -365,6 +365,6 @@ public class PostServiceTest {
         assertThrows(PostNotFoundException.class, () -> postService.delete(invalidId));
 
         verify(postRepository, times(1)).findById(invalidId);
-        verify(postRepository, never()).deleteById(invalidId);
+        verify(postRepository, never()).delete(mockedPostEntity);
     }
 }
